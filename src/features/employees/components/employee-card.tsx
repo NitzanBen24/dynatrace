@@ -11,12 +11,6 @@ type EmployeeCardProps = {
 
 export function EmployeeCard({ employee, onEdit, onDelete }: EmployeeCardProps) {
   const statusMeta = STATUS_LABELS.get(employee.status);
-  const initials = employee.name
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("");
 
   return (
     <article
@@ -33,10 +27,7 @@ export function EmployeeCard({ employee, onEdit, onDelete }: EmployeeCardProps) 
     >
       
 
-      <div className="flex items-center gap-4">
-        {/* <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-slate-200 via-slate-100 to-slate-50 text-sm font-semibold text-slate-600">
-          {initials || "?"}
-        </div> */}
+      <div className="flex items-center gap-4">        
         <div className="flex-1">
           <h3 className="text-base font-semibold text-slate-900">{employee.name}</h3>
           <div className="mt-1 flex items-center gap-2 text-xs text-slate-500">

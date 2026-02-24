@@ -1,11 +1,12 @@
 # Employee Status Dashboard
 
-A small Next.js + Supabase application for tracking employee work status. The project is built as a take‑home assignment and emphasizes clean architecture, MVVM on the client, and a clear server boundary.
+A small Next.js + PostgreSQL application for tracking employee work status. The project is built as a take‑home assignment and emphasizes clean architecture, MVVM on the client, and a clear server boundary.
 
 ## Tech stack
 
 - Next.js (App Router, TypeScript)
-- Supabase (Postgres + REST via `@supabase/supabase-js`)
+- Supabase or Neon (Postgres hosting)
+- Prisma ORM
 - React Query (server state management)
 - Tailwind CSS (styling)
 
@@ -43,11 +44,35 @@ npm install
 Create a `.env.local` file in the project root:
 
 ```
-SUPABASE_URL=your_project_url
-SUPABASE_ANON_KEY=your_anon_key
+DATABASE_URL=your_postgres_connection_string
 ```
 
-> If Row Level Security (RLS) is enabled, you must allow `SELECT`, `INSERT`, `UPDATE`, and `DELETE` for the anon role, or use a service role key on the server.
+For Supabase, you can copy the connection string from **Project Settings → Database → Connection string**.
+Example:
+
+```
+DATABASE_URL=postgresql://postgres:<password>@db.<project-ref>.supabase.co:5432/postgres?sslmode=require
+```
+
+If your network is IPv4‑only (common on some ISPs), use the **Connection pooler** string from the **Connect** modal instead of Direct:
+
+```
+DATABASE_URL=postgresql://postgres:<password>@<pooler-host>:5432/postgres?sslmode=require
+```
+
+### 2.1) Prisma setup
+
+If your database already has the `employees` table, run:
+
+```bash
+npx prisma generate
+```
+
+If you want Prisma to create the table for you:
+
+```bash
+npx prisma migrate dev --name init
+```
 
 ### 3) Run the app
 
@@ -57,7 +82,7 @@ npm run dev
 
 The app will be available at `http://localhost:3000`.
 
-## Supabase schema
+## Database schema
 
 The app expects a table named `employees` with these columns:
 
@@ -89,7 +114,7 @@ create table if not exists public.employees (
 ### Server
 
 - **Domain**: data types for employees
-- **Repository**: Supabase data access
+- **Repository**: Prisma data access
 - **Server Actions**: encapsulated mutation logic + revalidation hooks
 
 ### Client (MVVM)
